@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Titre du deck</title>
+<!-- theme.css AVANT styles.css : il pose les jetons que la structure consomme.
+     Pour changer d'identité visuelle, ne toucher que theme.css. -->
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="cadre">
+  <div id="scene">
+
+    <!-- Un écran de chapitre : un titre seul sur un fond nu. -->
+    <section class="ecran centre chapitre" id="ouverture">
+      <h2 class="titre geant a" data-pas="1">Titre du deck</h2>
+    </section>
+
+    <!-- Un chiffre héros. Le compteur est rempli par le hook. -->
+    <section class="ecran centre" id="chiffre">
+      <h2 class="titre a" data-pas="1">Le chiffre porte l’écran.</h2>
+      <span class="heros immense" data-compteur=""></span>
+      <p class="sous-titre a" data-pas="2" style="--d:.5s">ce que le chiffre compte.</p>
+    </section>
+
+    <!-- barres() : le conteneur est vide, le hook le remplit. -->
+    <section class="ecran" id="etapes">
+      <h2 class="titre a" data-pas="1">Le titre porte la conclusion.</h2>
+      <div class="barres haute quatre"></div>
+      <p class="souligne a" data-pas="4">La légende dit ce que le graphique ne dit pas.</p>
+    </section>
+
+    <!-- anneau() : .anneau-centre est optionnel, le hook le positionne. -->
+    <section class="ecran" id="repartition">
+      <h2 class="titre a" data-pas="1">Une répartition qui se déforme.</h2>
+      <div class="anneau">
+        <div class="anneau-centre">
+          <span class="anneau-total" data-compteur=""></span>
+          <span class="anneau-mot">unités</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- histo() : une série longue, lue comme une forme. -->
+    <section class="ecran" id="serie">
+      <p class="surtitre a" data-pas="1">Un surtitre annonce le sujet</p>
+      <h2 class="titre a" data-pas="1" style="--d:.2s">Et le titre dit la conclusion.</h2>
+      <div class="histo"></div>
+      <p class="souligne a" data-pas="4">L’unité et la période vont ici.</p>
+    </section>
+
+    <!-- Trois points, un par clic. Au-delà de trois, couper en deux écrans. -->
+    <section class="ecran" id="jalons">
+      <h2 class="titre a" data-pas="1">Trois points, pas davantage.</h2>
+      <ol class="jalons">
+        <li class="a" data-pas="2"><b>1</b><span>Le premier point.<em>Ce qui le précise, en retrait.</em></span></li>
+        <li class="a" data-pas="3"><b>2</b><span>Le deuxième point.<em>Ce qui le précise, en retrait.</em></span></li>
+        <li class="a" data-pas="4"><b>3</b><span>Le troisième point.<em>Ce qui le précise, en retrait.</em></span></li>
+      </ol>
+    </section>
+
+  </div><!-- /#scene -->
+</div><!-- /#cadre -->
+
+<div id="chrome">
+  <div id="progression" role="progressbar" aria-label="Progression"></div>
+  <div id="boutons">
+    <button type="button" data-action="precedent" title="Précédent (←)" aria-label="Précédent">‹</button>
+    <button type="button" data-action="suivant" title="Suivant (→)" aria-label="Suivant">›</button>
+    <button type="button" data-action="notes" title="Notes (N)" aria-label="Notes">✎</button>
+    <button type="button" data-action="sommaire" title="Sommaire (S)" aria-label="Sommaire">☰</button>
+    <button type="button" data-action="plein" title="Plein écran (F)" aria-label="Plein écran">⤢</button>
+  </div>
+  <div id="minuteur"></div>
+</div>
+
+<div id="notes">
+  <div id="notes-entete"><span id="notes-ou"></span><span id="notes-apres"></span></div>
+  <p id="notes-texte"></p>
+</div>
+
+<div id="sommaire" hidden>
+  <div id="sommaire-dedans">
+    <h3>Sommaire<span id="sommaire-total"></span></h3>
+    <ol id="sommaire-liste"></ol>
+    <p id="sommaire-aide">
+      <kbd>→</kbd> <kbd>←</kbd> avancer · <kbd>N</kbd> notes · <kbd>S</kbd> sommaire ·
+      <kbd>B</kbd> écran noir · <kbd>F</kbd> plein écran · <kbd>R</kbd> recommencer
+    </p>
+    <button type="button" id="sommaire-fermer">Fermer</button>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="scenes.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

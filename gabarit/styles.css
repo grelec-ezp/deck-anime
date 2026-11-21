@@ -1,0 +1,385 @@
+/* Structure et composants. AUCUNE valeur d'identité ici :
+   les couleurs et la typographie vivent dans theme.css. */
+
+/* Canvas fixe 1600 × 900, mis à l'échelle par app.js.
+   Tout se mesure en pixels de ce canvas : la mise en page ne se recompose
+   jamais, elle est identique du portable au vidéoprojecteur.
+
+   Ce fichier ne décide d'aucune couleur ni d'aucune taille : il ne consomme
+   que les jetons posés par theme.css. C'est ce qui permet de rhabiller un deck
+   entier sans y toucher. */
+
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--fond-0)}
+body{
+  font-family:var(--police);
+  color:var(--encre);
+  font-variant-numeric:tabular-nums;
+  -webkit-font-smoothing:antialiased;
+}
+
+#cadre{position:fixed;inset:0;overflow:hidden}
+#scene{
+  position:absolute;left:50%;top:50%;
+  width:1600px;height:900px;transform-origin:center center;
+  background:
+    radial-gradient(120% 90% at 80% 8%, color-mix(in srgb, var(--accent) 9%, transparent) 0%, transparent 55%),
+    linear-gradient(155deg, var(--fond-2) 0%, var(--fond-1) 48%, var(--fond-0) 100%);
+  overflow:hidden;isolation:isolate;
+}
+
+/* ---- Squelette d'écran ---- */
+.ecran{
+  position:absolute;inset:0;z-index:10;
+  padding:var(--marge-y) var(--marge-x);
+  display:none;flex-direction:column;opacity:0;
+}
+.ecran.est-actif{display:flex;animation:entreEcran .28s var(--ease) both}
+.ecran.est-sorti{display:flex;animation:sortEcran .2s ease both;z-index:9}
+@keyframes entreEcran{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes sortEcran{from{opacity:1}to{opacity:0}}
+
+/* Un élément marqué .a apparaît quand sa classe pas-N est posée.
+   Le délai --d sert au mode auto ; en présentateur il reste à zéro. */
+.a{opacity:0}
+.pas-1 .a[data-pas="1"],.pas-2 .a[data-pas="2"],.pas-3 .a[data-pas="3"],
+.pas-4 .a[data-pas="4"],.pas-5 .a[data-pas="5"],.pas-6 .a[data-pas="6"]{
+  animation:apparait .6s calc(var(--d,0s) * var(--tempo,1)) both var(--ease);
+}
+@keyframes apparait{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ---- Typographie ---- */
+.titre{font-size:var(--t-titre);font-weight:700;line-height:1.12;letter-spacing:-.03em;max-width:1240px}
+.titre.geant{font-size:var(--t-geant);line-height:1.04;letter-spacing:-.035em;max-width:1280px}
+.sous-titre{font-size:var(--t-sous);color:var(--encre-2);margin-top:18px;max-width:1120px;line-height:1.35}
+.surtitre{font-size:var(--t-sur);font-weight:600;text-transform:uppercase;letter-spacing:.18em;
+  color:var(--alerte);margin-bottom:22px}
+.heros{display:block;font-size:var(--t-heros);font-weight:800;line-height:.86;
+  letter-spacing:-.045em;color:var(--accent)}
+.heros.immense{font-size:var(--t-heros-xl)}
+.heros.alerte{color:var(--alerte)}
+.chiffre{display:block;font-size:var(--t-chiffre);font-weight:800;letter-spacing:-.03em;color:var(--accent)}
+.chiffre.alerte{color:var(--alerte)}
+.legende{display:block;font-size:var(--t-legende);font-weight:500;line-height:1.35;
+  color:var(--encre-2);margin-top:14px;max-width:400px}
+.legende.large{max-width:700px}
+.rangee{display:flex;gap:70px;align-items:flex-end;margin-top:30px}
+.rangee.bas{margin-top:auto;align-items:center;gap:90px}
+.centre{align-items:center;justify-content:center;text-align:center}
+.bloc-heros{margin-top:auto}
+.souligne{font-size:var(--t-souligne);color:var(--encre-2);margin-top:34px;
+  padding-top:22px;border-top:1px solid var(--encre-4);max-width:1000px}
+.souligne.alerte{color:var(--alerte)}
+.souligne.centre-souligne{border-top:0;padding-top:0;margin-top:30px;color:var(--encre-3)}
+
+/* ---- Marque ---- */
+.marque{display:flex;align-items:center;gap:18px;margin-bottom:34px}
+.marque i{width:42px;height:52px;border-left:13px solid var(--accent);
+  border-bottom:13px solid var(--accent);border-bottom-left-radius:3px}
+.marque span{font-size:24px;font-weight:600;letter-spacing:.03em;color:var(--encre-2)}
+
+/* ---- Écran de chapitre ---- */
+.chapitre{background:
+  radial-gradient(90% 120% at 50% 0%, color-mix(in srgb, var(--second) 10%, transparent) 0%, transparent 60%),
+  linear-gradient(160deg, var(--fond-3) 0%, var(--fond-2) 55%, var(--fond-1) 100%)}
+.chapitre.accent{background:
+  radial-gradient(90% 120% at 50% 0%, color-mix(in srgb, var(--accent) 16%, transparent) 0%, transparent 62%),
+  linear-gradient(160deg, color-mix(in srgb, var(--fond-3) 88%, var(--accent) 12%) 0%,
+              var(--fond-2) 55%, var(--fond-1) 100%)}
+.chapitre.accent .titre{color:var(--accent)}
+
+/* ---- Observation ---- */
+.observation{border-left:6px solid var(--alerte)}
+
+/* ---- Citation ---- */
+.citation blockquote{font-size:52px;font-weight:600;line-height:1.24;
+  letter-spacing:-.02em;max-width:1180px;color:var(--encre)}
+.citation blockquote::before{content:"«\00a0"}
+.citation blockquote::after{content:"\00a0»"}
+.citation .surtitre{color:var(--second)}
+.citation.tendu .surtitre{color:var(--alerte)}
+.citation.tendu blockquote{color:var(--alerte)}
+
+/* ---- Jalons : une liste qui se révèle pas à pas ---- */
+.jalons{list-style:none;margin-top:auto;display:flex;flex-direction:column;gap:30px}
+.jalons li{display:flex;align-items:baseline;gap:28px}
+.jalons b{flex:0 0 auto;font-size:31px;font-weight:800;color:var(--accent);
+  min-width:44px;letter-spacing:-.02em}
+.jalons span{font-size:36px;font-weight:600;line-height:1.25;letter-spacing:-.015em}
+.jalons.horizons b{min-width:224px;font-size:25px;font-weight:700;color:var(--second);
+  text-transform:uppercase;letter-spacing:.1em}
+.jalons.horizons li:last-child b{color:var(--alerte)}
+
+/* ---- Réflexes biffés ---- */
+.biffes{list-style:none;margin-top:auto;display:flex;flex-direction:column;gap:34px}
+.biffes li{position:relative;font-size:44px;font-weight:600;color:var(--encre-3);
+  letter-spacing:-.02em;width:max-content;max-width:1200px}
+.biffes li::before{content:"«\00a0"}
+.biffes li::after{content:"\00a0»"}
+.biffes li span.rature{position:absolute;left:0;top:52%;height:4px;background:var(--alerte);
+  border-radius:2px;transform-origin:left center}
+
+/* ---- Écran de bascule (vidéo, démo) ---- */
+.cue svg{width:196px;height:196px;fill:var(--accent);opacity:.9}
+.cue svg rect{fill:none;stroke:var(--accent);stroke-width:5}
+.cue svg rect:last-child{fill:var(--accent);stroke:none}
+
+/* ---- Image ---- */
+.meme{margin-top:30px;max-height:520px;border-radius:16px;
+  box-shadow:var(--ombre-haute)}
+.qr{margin-top:34px;width:290px;height:290px;border-radius:18px;
+  background:var(--cadre-image);padding:14px;box-shadow:var(--ombre-basse)}
+
+/* ---- Placeholder assumé ---- */
+.trou{border:2px dashed var(--encre-4);border-radius:20px;
+  margin:44px;inset:auto;position:absolute;top:0;left:0;right:0;bottom:0}
+.trou .surtitre{color:var(--encre-3)}
+.trou .titre{color:var(--encre-2)}
+
+/* ---- Frise du programme ---- */
+.frise{margin-top:auto;margin-bottom:auto;display:flex;flex-direction:column;gap:0}
+.frise .creneau{display:flex;align-items:center;gap:36px;padding:19px 0;
+  border-bottom:1px solid var(--encre-4)}
+.frise .creneau:last-child{border-bottom:0}
+.frise .h{flex:0 0 auto;min-width:150px;font-size:34px;font-weight:800;
+  letter-spacing:-.02em;color:var(--encre-3)}
+.frise .quoi{font-size:34px;font-weight:600;letter-spacing:-.015em;color:var(--encre-2)}
+.frise .creneau.fort .h,.frise .creneau.fort .quoi{color:var(--accent)}
+
+/* ---- Diagramme en barres ---- */
+.barres{margin-top:auto;display:flex;align-items:flex-end;gap:112px;height:524px;
+  width:max-content;padding-bottom:62px;padding-right:300px;position:relative}
+.barres.haute{height:566px}
+.barres .barre{flex:0 0 212px;display:flex;flex-direction:column;
+  justify-content:flex-end;height:100%;position:relative}
+.barres .tige{width:100%;border-radius:12px 12px 0 0;background:var(--accent);
+  height:0;transition:height .95s var(--ease)}
+.barres .barre.second .tige{background:var(--second)}
+.barres .barre.alerte .tige{background:var(--alerte)}
+.barres .barre.creuse .tige{background:transparent;border:3px dashed var(--encre-3);
+  border-bottom:0;border-radius:12px 12px 0 0}
+.barres .val{position:absolute;left:0;right:0;text-align:center;font-size:40px;
+  font-weight:800;letter-spacing:-.02em;color:var(--accent);
+  transition:bottom .95s var(--ease),opacity .4s}
+.barres .barre.second .val{color:var(--second)}
+.barres .barre.alerte .val{color:var(--alerte)}
+.barres .barre.creuse .val{color:var(--encre-3)}
+.barres .nom{position:absolute;left:-24px;right:-24px;bottom:-50px;text-align:center;
+  font-size:24px;font-weight:600;color:var(--encre-3);letter-spacing:.02em}
+.barres .repere{position:absolute;left:0;right:0;height:0;
+  border-top:2px dashed var(--alerte);opacity:0;transition:opacity .5s}
+.barres .repere b{position:absolute;right:0;top:-34px;font-size:21px;
+  font-weight:700;color:var(--alerte);letter-spacing:.02em}
+
+/* ---- Colonnes de roadmap ---- */
+.colonnes{margin-top:44px;display:grid;grid-template-columns:1fr 1fr;gap:44px;flex:1}
+.colonnes .col{display:flex;flex-direction:column;gap:12px}
+.colonnes .col h3{font-size:22px;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--second);margin-bottom:8px}
+.colonnes .col.futur h3{color:var(--accent)}
+.colonnes .item{font-size:25px;font-weight:500;line-height:1.25;padding:13px 20px;
+  border-radius:11px;background:color-mix(in srgb, var(--encre) 5.5%, transparent);color:var(--encre-2)}
+.colonnes .col.futur .item{background:color-mix(in srgb, var(--accent) 11%, transparent);color:var(--encre)}
+
+/* ---- Chips ---- */
+.chips{margin-top:auto;margin-bottom:36px;display:flex;flex-wrap:wrap;gap:18px;
+  max-width:1400px}
+.chips .chip{font-size:29px;font-weight:600;letter-spacing:-.01em;padding:17px 27px;
+  border-radius:999px;background:color-mix(in srgb, var(--encre) 6%, transparent);
+  border:1px solid var(--encre-4);color:var(--encre)}
+
+/* ---- Cartes d'équipe ---- */
+.equipes{margin-top:auto;margin-bottom:20px;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:34px}
+.equipes .carte{border-radius:20px;padding:38px 34px 34px;background:var(--fond-2);
+  border:2px solid var(--encre-4);display:flex;flex-direction:column;gap:22px;
+  min-height:318px}
+.equipes .carte.cyan{border-color:var(--second)}
+.equipes .carte.mauve{border-color:var(--alerte)}
+.equipes .carte.lime{border-color:var(--accent)}
+.equipes .carte .l{width:26px;height:34px;border-left:9px solid var(--second);
+  border-bottom:9px solid var(--second);border-bottom-left-radius:2px}
+.equipes .carte.mauve .l{border-color:var(--alerte)}
+.equipes .carte.lime .l{border-color:var(--accent)}
+.equipes .carte h3{font-size:31px;font-weight:700;letter-spacing:-.02em}
+.equipes .carte .n{margin-top:auto;font-size:88px;font-weight:800;line-height:1;
+  letter-spacing:-.04em;color:var(--encre)}
+.equipes .carte .u{font-size:21px;color:var(--encre-3);margin-top:6px}
+
+/* ---- Grille de points ---- */
+.grille{display:grid;gap:9px;width:max-content}
+.grille .point{width:16px;height:16px;border-radius:50%;
+  background:var(--encre-4);transition:background .35s var(--ease)}
+.grille .point.accent{background:var(--accent)}
+.grille .point.alerte{background:var(--alerte)}
+
+/* ---- Courbe ---- */
+.zone-courbe{position:relative;height:300px;margin-top:auto}
+.zone-courbe svg{width:100%;height:100%;overflow:visible;color:var(--accent)}
+.courbe-aire{fill:url(#aireCourbe)}
+.courbe-trait{fill:none;stroke:var(--accent);stroke-width:3;
+  stroke-linecap:round;stroke-linejoin:round}
+.courbe-axe{stroke:color-mix(in srgb, var(--encre) 12%, transparent);stroke-width:1}
+.annees{display:flex;justify-content:space-between;font-size:17px;color:var(--encre-3);margin-top:8px}
+
+/* ---- Chrome ---- */
+#chrome{position:fixed;inset:0;z-index:200;pointer-events:none}
+#progression{position:absolute;top:0;left:0;right:0;height:4px;display:flex;gap:2px;
+  pointer-events:auto;cursor:pointer;background:color-mix(in srgb, var(--encre) 7.0%, transparent)}
+#progression i{flex:1 1 auto;background:color-mix(in srgb, var(--encre) 10%, transparent);transition:background .25s}
+#progression i.faite{background:color-mix(in srgb, var(--accent) 45%, transparent)}
+#progression i.active{background:var(--accent)}
+#progression:hover{height:8px;transition:height .15s}
+
+#boutons{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);
+  display:flex;gap:6px;pointer-events:auto;opacity:0;transition:opacity .25s}
+body.montre-ui #boutons,#boutons:hover{opacity:1}
+#boutons button{width:38px;height:38px;border:0;border-radius:10px;cursor:pointer;
+  background:color-mix(in srgb, var(--encre) 9%, transparent);color:var(--encre-2);
+  font:inherit;font-size:16px;display:grid;place-items:center;backdrop-filter:blur(6px)}
+#boutons button:hover{background:var(--accent);color:var(--fond-1)}
+
+#minuteur{position:absolute;right:26px;bottom:20px;font-size:14px;color:var(--encre-3);
+  font-variant-numeric:tabular-nums}
+#minuteur.depasse{color:var(--alerte)}
+
+/* ---- Notes de l'orateur ---- */
+#notes{position:fixed;z-index:250;left:0;right:0;bottom:0;
+  padding:18px 26px 20px;background:color-mix(in srgb, var(--fond-0) 95%, transparent);backdrop-filter:blur(10px);
+  border-top:1px solid color-mix(in srgb, var(--encre) 12%, transparent);
+  transform:translateY(101%);transition:transform .28s var(--ease)}
+body.avec-notes #notes{transform:none}
+body.avec-notes #scene{transform-origin:center 34%}
+#notes-entete{display:flex;gap:20px;font-size:13px;color:var(--encre-3);margin-bottom:8px}
+#notes-texte{font-size:19px;line-height:1.45;color:var(--encre);white-space:pre-wrap;
+  max-height:180px;overflow:auto}
+
+/* ---- Sommaire ---- */
+#sommaire{position:fixed;inset:0;z-index:300;overflow:auto;padding:48px;
+  background:color-mix(in srgb, var(--fond-0) 96%, transparent);backdrop-filter:blur(10px)}
+#sommaire-dedans{max-width:1040px;margin:0 auto}
+#sommaire h3{font-size:26px;font-weight:700;margin-bottom:20px}
+#sommaire-total{font-size:15px;font-weight:400;color:var(--encre-3);margin-left:12px}
+#sommaire-liste{list-style:none;columns:2;column-gap:32px}
+#sommaire-liste li{break-inside:avoid}
+.sommaire-chapitre{font-size:13px;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--accent);margin:18px 0 8px;break-after:avoid}
+#sommaire-liste li button{width:100%;text-align:left;display:flex;gap:14px;
+  padding:9px 12px;border:0;border-radius:9px;cursor:pointer;
+  background:transparent;color:var(--encre-2);font:inherit;font-size:17px}
+#sommaire-liste li button:hover{background:color-mix(in srgb, var(--encre) 7.0%, transparent);color:var(--encre)}
+#sommaire-liste li.est-ici button{background:color-mix(in srgb, var(--accent) 16%, transparent);color:var(--encre)}
+#sommaire-liste b{color:var(--encre-3);font-weight:600;min-width:26px}
+#sommaire-aide{margin-top:28px;font-size:14px;color:var(--encre-3)}
+#sommaire-fermer{margin-top:22px;padding:10px 20px;border:0;border-radius:9px;cursor:pointer;
+  background:color-mix(in srgb, var(--encre) 10%, transparent);color:var(--encre);font:inherit}
+kbd{font:inherit;font-size:12px;padding:2px 7px;border-radius:5px;
+  background:color-mix(in srgb, var(--encre) 10%, transparent);border:1px solid color-mix(in srgb, var(--encre) 14.0%, transparent)}
+
+/* ---- Écran noir, pour reprendre la parole ---- */
+body.ecran-noir #cadre,body.ecran-noir #chrome{opacity:0;transition:opacity .2s}
+body.ecran-noir{background:#000;cursor:none}
+
+/* ---- Mouvement réduit ---- */
+html.reduit *,html.reduit *::before,html.reduit *::after{
+  animation-duration:.01ms !important;animation-delay:0ms !important;
+  transition-duration:.01ms !important;transition-delay:0ms !important}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;animation-delay:0ms !important;
+    transition-duration:.01ms !important;transition-delay:0ms !important}
+}
+
+/* ═══════════ Anneau, histogramme long, bande de vignettes ═══════════
+   Les quartiers de l'anneau tirent leur couleur de la rampe catégorielle
+   (--serie-1 à --serie-5), pas des quatre couleurs de sens : une part de
+   camembert désigne une catégorie, elle ne veut rien dire d'autre. */
+
+.anneau{position:relative;width:1408px;margin:auto 0 0}
+.anneau-svg{width:100%;height:100%;display:block}
+.anneau-piste{stroke:var(--encre-4)}
+.anneau-part{transform-box:view-box;
+  transition:stroke-dashoffset .95s var(--ease),transform .95s var(--ease)}
+.anneau-part.s-1  {stroke:var(--serie-1)}
+.anneau-part.s-2 {stroke:var(--serie-2)}
+.anneau-part.s-3 {stroke:var(--serie-3)}
+.anneau-part.s-4 {stroke:var(--serie-4)}
+.anneau-part.s-5{stroke:var(--serie-5)}
+.anneau-rappel{fill:none;stroke:var(--encre-4);stroke-width:2}
+
+.anneau-centre{position:absolute;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;pointer-events:none}
+.anneau-total{font-size:72px;font-weight:800;letter-spacing:-.035em;line-height:1}
+.anneau-mot{font-size:26px;font-weight:500;color:var(--encre-3);margin-top:12px}
+
+.anneau-etiquette{position:absolute;transform:translate(-50%,-50%);text-align:center;
+  white-space:nowrap;opacity:0;
+  transition:left .95s var(--ease),top .95s var(--ease),opacity .5s var(--ease)}
+.anneau-etiquette.est-on{opacity:1}
+.anneau-etiquette b{display:block;font-size:24px;font-weight:600;color:var(--encre-2)}
+.anneau-etiquette span{display:block;font-size:37px;font-weight:800;
+  letter-spacing:-.02em;margin-top:4px;font-variant-numeric:tabular-nums}
+.anneau-etiquette.s-1   span{color:var(--serie-1)}
+.anneau-etiquette.s-2  span{color:var(--serie-2)}
+.anneau-etiquette.s-3  span{color:var(--serie-3)}
+.anneau-etiquette.s-4  span{color:var(--serie-4)}
+.anneau-etiquette.s-5 span{color:var(--serie-5)}
+
+/* Cinq barres tiennent dans la scène : l'espacement par défaut est prévu
+   pour deux ou trois. */
+.barres.cinq{gap:54px;padding-right:0;width:100%;height:470px}
+.barres.cinq .barre{flex:1 1 0}
+
+/* Deuxième ligne d'un jalon : ce qui précise sans peser autant. */
+.jalons em{display:block;font-style:normal;font-size:26px;font-weight:500;
+  color:var(--encre-3);margin-top:9px;letter-spacing:0}
+
+/* Histogramme : le passé en cyan, l'engagement en lime. */
+.histo{margin-top:auto;display:flex;flex-direction:column}
+.histo-piste{position:relative;display:flex;align-items:flex-end;gap:8px;height:396px}
+.histo-barre{flex:1 1 0;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+.histo-barre i{display:block;width:100%;height:0;border-radius:6px 6px 0 0;
+  background:var(--second);transition:height .8s var(--ease)}
+.histo-barre.futur i{background:var(--accent)}
+.histo-sep{position:absolute;top:-14px;bottom:0;width:0;
+  border-left:2px dashed var(--encre-3);opacity:0;transition:opacity .5s var(--ease)}
+.histo-sep.est-on{opacity:1}
+.histo-axe{position:relative;height:44px;margin-top:14px;border-top:1px solid var(--encre-4)}
+.histo-repere{position:absolute;top:14px;transform:translateX(-50%);
+  font-size:24px;font-weight:600;color:var(--encre-3);white-space:nowrap}
+
+/* ═══════════ Cible en pointillés, sur la trajectoire ═══════════
+   Le bleu électrique ne dit qu'une chose dans tout le deck : la cible qu'il
+   reste à atteindre. À ne pas confondre avec le cyan, qui désigne le digital. */
+.barres .barre.cible.creuse .tige{border-color:var(--cible)}
+.barres .barre.cible .val{color:var(--cible)}
+.barres .barre.cible .nom{color:var(--cible);opacity:.75}
+
+/* Quatre barres ne tiennent pas avec l'espacement prévu pour trois. */
+.barres.quatre{gap:78px;padding-right:220px}
+
+/* Une barre pas encore levée ne montre ni son contour ni son nom. */
+.barres .barre .nom{transition:opacity .45s var(--ease)}
+.barres .barre.vide .nom{opacity:0}
+/* .vide.creuse et non .vide seul : la règle du bleu électrique compte quatre
+   classes et l'emporterait sinon, le liseré de la cible resterait visible. */
+.barres .barre.vide.creuse .tige{border-color:transparent}
+
+/* ═══════════ Bande de campagnes ═══════════
+   La hauteur de rangée est commune ; la largeur de chaque tuile se déduit de
+   son ratio. C'est ce qui aligne les trois bandes tout en laissant carrés et
+   formats verticaux voisiner sans les déformer. */
+.campagnes{--h-camp:196px;margin-top:40px;display:flex;flex-direction:column;gap:28px}
+.camp{display:flex;align-items:center;gap:32px;height:var(--h-camp)}
+
+.camp-nom{flex:0 0 318px}
+.camp-nom b{display:block;font-size:25px;font-weight:800;color:var(--accent);
+  letter-spacing:.06em;margin-bottom:9px}
+.camp-nom span{display:block;font-size:31px;font-weight:600;line-height:1.18;
+  letter-spacing:-.015em}
+
+.camp-creas{display:flex;gap:14px;height:100%}
+.crea{flex:0 0 auto;height:100%;width:calc(var(--h-camp) * var(--ratio));
+  border-radius:12px;overflow:hidden;background:color-mix(in srgb, var(--encre) 5%, transparent)}
+.crea img,.crea video{width:100%;height:100%;object-fit:cover;display:block}
