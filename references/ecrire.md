@@ -56,8 +56,8 @@ Trois chiffres côte à côte, c'est déjà un tableau : la salle compare au lie
 d'écouter. Si les trois comptent, ils méritent trois écrans, ou une révélation
 en trois pas.
 
-**Arrondir.** « 16 247 » est exact, « seize mille » est ce qu'on retient. Garder
-la précision pour les notes et pour la question qui viendra.
+**Arrondir.** « 4 783 » est exact, « près de cinq mille » est ce qu'on retient.
+Garder la précision pour les notes et pour la question qui viendra.
 
 **Ne jamais afficher un chiffre dont on ne parle pas.** S'il est à l'écran, la
 salle le lit et attend l'explication.

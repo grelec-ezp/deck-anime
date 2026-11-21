@@ -90,7 +90,7 @@ function grillePoints(hote, nombre, colonnes) {
 
 /* Allume une part des points, en les répartissant au hasard. */
 function allumeRatio(points, ratio, classe, parImage) {
-  classe = classe || 'vif';
+  classe = classe || 'accent';   /* doit correspondre à .grille .point.accent */
   var cible = Math.round(points.length * ratio), i = 0;
   var ordre = points.map(function (p, k) { return k; });
   for (var k = ordre.length - 1; k > 0; k--) {

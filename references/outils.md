@@ -47,16 +47,17 @@ Histogramme vertical, deux à cinq barres.
 
 ```js
 barres(q('.barres', s), [
-  { nom: 'juin',     valeur: 10000, texte: nbsp(10000) },
-  { nom: 'décembre', valeur: 30000, texte: nbsp(30000), creuse: true },
-  { nom: 'cible',    valeur: 35000, texte: nbsp(35000), creuse: true, ton: 'electrique' }
-], { max: 50000, repere: { valeur: 50000, texte: 'objectif initial' } });
+  { nom: 'au départ',   valeur: 1200, texte: nbsp(1200) },
+  { nom: 'aujourd’hui', valeur: 2400, texte: nbsp(2400) },
+  { nom: 'prévu',       valeur: 4800, texte: nbsp(4800), creuse: true },
+  { nom: 'visé',        valeur: 6000, texte: nbsp(6000), creuse: true, ton: 'cible' }
+], { max: 8000, repere: { valeur: 8000, texte: 'ambition initiale' } });
 ```
 
 Rend `{ leve(i, direct), baisse(), montreRepere() }`.
 
 - `creuse` : contour en pointillés au lieu d'un aplat — pour une projection.
-- `ton` : `appui`, `tension`, `electrique`. Par défaut le lime.
+- `ton` : `second`, `cible`, `alerte`. Par défaut `--accent`.
 - `options.max` : **à poser explicitement** quand le rapport entre les barres
   est le propos. Sans lui, la plus haute remplit toute la hauteur et exagère
   l'écart ; avec `max: 100`, un 75 contre 25 se lit bien comme un rapport de 3.
